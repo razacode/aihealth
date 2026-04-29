@@ -3,23 +3,20 @@ import re
 def redact_text(text: str):
     redaction_map = []
 
-    # Phone numbers
     def redact_phone(match):
         redaction_map.append({
             "type": "phone",
             "value": match.group(),
         })
         return "[REDACTED_PHONE]"
-
-    # Names (simple heuristic: capitalized words)
+    
     def redact_name(match):
         redaction_map.append({
             "type": "name",
             "value": match.group(),
         })
         return "[REDACTED_NAME]"
-
-    # Dates (simple)
+    
     def redact_date(match):
         redaction_map.append({
             "type": "date",
