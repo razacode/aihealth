@@ -1,14 +1,26 @@
-# Clinical Audio AI (Prototype)
+#  Clinical Audio AI
 
-## Features
-Uses WhisperX for transcription and speaker diarization in a unified pipeline.
-- Audio → Text (Whisper)
-- Redaction (Name, Phone, Date)
-- Structured Segments
-- JSON Output
+AI-powered system to convert doctor–patient audio into:
+- 📝 Clean transcript
+- 👥 Speaker-separated conversation
+- 🔐 Redacted sensitive information
+
+
+##  Features
+
+- 🎧 Upload `.wav` audio
+- 🧠 Speech-to-text using WhisperX
+- 👥 Speaker segmentation (S1 / S2)
+- 💬 Chat-style Doctor–Patient UI
+- 🔐 Automatic redaction (names, phone numbers, etc.)
+- 📊 Timeline with timestamps
+- 📥 Download structured JSON output
+
+
 
 ## Run
 
 ```bash
 pip install -r requirements.txt
-python app/main.py data/input/sample.wav
+source venv/Scripts/activate
+python -m streamlit run app/ui.py
