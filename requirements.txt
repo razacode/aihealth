@@ -1,4 +1,4 @@
-openai-whisper
-regex
-streamlit
-jiwer
+whisperx
+torch
+torchaudio
+pytest

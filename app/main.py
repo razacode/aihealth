@@ -1,32 +1,21 @@
-import sys
-from transcribe import transcribe_audio
+from whisperx_service import transcribe_with_diarization
 from redact import redact_text
-from segment import segment_text
 from utils import save_output
 
-def run_pipeline(audio_path):
-    print("🔊 Transcribing...")
-    text = transcribe_audio(audio_path)
+audio_path = "data/input/dp.wav"
 
-    print("🔐 Redacting...")
-    redacted_text, redaction_map = redact_text(text)
+segments = transcribe_with_diarization(audio_path)
 
-    print("🧩 Segmenting...")
-    segments = segment_text(redacted_text)
+full_text = " ".join([seg["text"] for seg in segments])
 
-    output = {
-        "segments": segments,
-        "redacted_transcript": redacted_text,
-        "redaction_map": redaction_map
-    }
+redacted_text, redaction_map = redact_text(full_text)
 
-    save_output(output)
+output = {
+    "segments": segments,
+    "redacted_transcript": redacted_text,
+    "redaction_map": redaction_map
+}
 
-    print("\n✅ Done! Output saved to data/output/output.json\n")
-    print(output)
+save_output(output)
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python main.py data/input/sample.wav")
-    else:
-        run_pipeline(sys.argv[1])
+print(output)

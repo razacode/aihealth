@@ -1,31 +1,24 @@
 import re
 
-def redact_text(text: str):
+def redact_text(text):
     redaction_map = []
 
-    def redact_phone(match):
-        redaction_map.append({
-            "type": "phone",
-            "value": match.group(),
-        })
-        return "[REDACTED_PHONE]"
-    
     def redact_name(match):
         redaction_map.append({
             "type": "name",
-            "value": match.group(),
+            "value": match.group(2)
         })
-        return "[REDACTED_NAME]"
-    
-    def redact_date(match):
-        redaction_map.append({
-            "type": "date",
-            "value": match.group(),
-        })
-        return "[REDACTED_DATE]"
+        return match.group(1) + " [REDACTED_NAME]"
 
-    text = re.sub(r"\b\d{10}\b", redact_phone, text)
-    text = re.sub(r"\b[A-Z][a-z]{3,}\b", redact_name, text)
-    text = re.sub(r"\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b", redact_date, text)
+    text = re.sub(
+        r"(my name is|I am|this is)\s+([A-Z][a-z]+)",
+        redact_name,
+        text,
+        flags=re.IGNORECASE
+    )
+
+    text = re.sub(r"\b\d{10}\b", "[REDACTED_PHONE]", text)
+
+    text = re.sub(r"\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b", "[REDACTED_DATE]", text)
 
     return text, redaction_map
